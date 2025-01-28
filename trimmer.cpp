@@ -8,6 +8,11 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 
+QString ffmpeg_path() {
+    // Specify the full path to where the ffmpeg.exe is located in your system
+    return "./ffmpeg-master-latest-win64-gpl-shared/bin/ffmpeg.exe";
+}
+
 Trimmer::Trimmer(const QString &filePath, QWidget *parent)
     : QDialog(parent), videoFilePath(filePath)
 {
@@ -91,8 +96,7 @@ void Trimmer::on_buttonBox_accepted()
     probeArguments << "-i" << videoFilePath; // Input video file
 
     // Start FFmpeg probe to get video duration
-    // Specify the full path to where you put the ffmpeg.exe
-    probeProcess->start("./ffmpeg-master-latest-win64-gpl-shared/bin/ffmpeg.exe", probeArguments);
+    probeProcess->start(ffmpeg_path(), probeArguments);
     probeProcess->waitForFinished();
 
     QByteArray probeOutput = probeProcess->readAllStandardError();
@@ -158,7 +162,7 @@ void Trimmer::on_buttonBox_accepted()
     });
 
     // Start the process
-    process->start("C:/ffmpeg-master-latest-win64-gpl-shared/bin/ffmpeg.exe", arguments);
+    process->start(ffmpeg_path(), arguments);
 
     if (!process->waitForStarted()) {
         qDebug() << "Failed to start FFmpeg process. Error: " << process->errorString();
